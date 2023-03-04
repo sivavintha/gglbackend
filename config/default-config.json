@@ -1,0 +1,20 @@
+{
+  "port": 3000,
+  "socketPort": 3010,
+  "db": "mongodb://localhost:27017/ggl",
+  "privateKey": "gglPKey",
+  "algorithm": "aes-128-cbc",
+  "itemLimit": 10,
+  "expiresIn": 480,
+  "email": {
+    "id": "ggl.tuty@gmail.com",
+    "password": "Vinoth87$",
+    "host": "smtp.gmail.com",
+    "port": "587"
+  },
+
+  "logReport": {
+    "to": "",
+    "cc": ""
+  }
+}
