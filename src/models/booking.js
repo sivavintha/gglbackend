@@ -8,12 +8,12 @@ const bookingSchema = new mongoose.Schema(
     fyear: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "fyear",
-      required: false,
+      required: true,
     },
     pc_code: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "profitcenter",
-      required: false,
+      required: true,
     },
 
     freight: { type: String, required: true },
@@ -22,22 +22,22 @@ const bookingSchema = new mongoose.Schema(
     pol: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "seaports",
-      required: false,
+      required: true,
     },
     pod: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "seaports",
-      required: false,
+      required: true,
     },
-    finalDestination: { type: String, required: true },
-    blNo: { type: String, required: true },
-    blType: { type: String, required: false, default: "direct" },
+    finalDestination: { type: String, required: false },
+    blNo: { type: String, required: false },
+    blType: { type: String, required: false, default: "Direct" },
     mblTerms: { type: String, required: false },
     hblTerms: { type: String, required: false },
     commodity: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "commodity",
-      required: false,
+      required: true,
     },
     vessel: { type: String, required: false },
     voyage: { type: String, required: false },
@@ -137,7 +137,7 @@ const bookingSchema = new mongoose.Schema(
     line: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "customervendor",
-      required: true,
+      required: false,
     },
     overseasAgent: {
       type: mongoose.Schema.Types.ObjectId,

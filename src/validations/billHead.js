@@ -8,7 +8,7 @@ function validateCreateBillHead(billHead) {
 
     code: Joi.string().required(),
     billHeadName: Joi.string().required(),
-    sac: Joi.string().required(),
+    sac: Joi.string().optional().allow("").allow(null),
     gstApplicable: Joi.boolean().optional().default(true),
     gstSlab: Joi.string().required(),
 

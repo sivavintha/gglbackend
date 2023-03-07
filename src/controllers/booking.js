@@ -17,6 +17,11 @@ module.exports.createBooking = async function (req) {
     req.body.deletedAt = null;
     req.body.deletedBy = null;
     req.body.updatedBy = null;
+    // req.body.containers = [];
+    // req.body.buyRate=[];
+    // req.body.sellRate=[];
+    // req.body.vesselSchedule=[];
+    // req.body.events=[];
 
     let counter = await Counter.findOne({ type: "BOOKING" });
     if (!counter) {
@@ -31,7 +36,7 @@ module.exports.createBooking = async function (req) {
       counter.prefix +
       (+counter.sequenceNumber + 1).toString().padStart(counter.noOfDigits, 0) +
       counter.suffix;
-    req.body.code = code;
+    req.body.bookingNo = code;
 
     // Validation
     const { error, value } = validateCreateBooking(req.body);
@@ -84,7 +89,18 @@ module.exports.getBookingByID = async function (id) {
   try {
     winston.info(`Getting information of booking: ${id}`);
 
-    const booking = await Booking.findById(id);
+    const booking = await Booking.findById(id)
+      .populate("shipper")
+      .populate("consignee")
+      .populate("notifier")
+      .populate("overseasAgent")
+      .populate("deliveryAgent")
+      .populate("line")
+      .populate("transporter")
+      .populate("CHA")
+      .populate("commodity")
+      .populate("pol")
+      .populate("pod");
     if (_.isEmpty(booking)) {
       winston.debug("Invalid Booking");
       return {
@@ -114,7 +130,18 @@ module.exports.getAllBooking = async function () {
   try {
     winston.info("Getting All Booking");
 
-    const booking = await Booking.find({ isDeleted: false });
+    const booking = await Booking.find({ isDeleted: false })
+      .populate("shipper")
+      .populate("consignee")
+      .populate("notifier")
+      .populate("overseasAgent")
+      .populate("deliveryAgent")
+      .populate("line")
+      .populate("transporter")
+      .populate("CHA")
+      .populate("commodity")
+      .populate("pol")
+      .populate("pod");
     if (_.isEmpty(booking)) {
       winston.debug();
       return {

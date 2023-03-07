@@ -21,7 +21,7 @@ function validateCreateCustomerVendor(customerVendor) {
     mobileNumber: Joi.string().optional().default("").allow("").allow(null),
     profitCenter: Joi.string().required(),
 
-    gstInNumber: Joi.string().optional().allow("").allow("null"),
+    gstInNumber: Joi.string().optional().allow("").allow(null),
 
     isShipper: Joi.boolean().optional().default(false),
     isConsignee: Joi.boolean().optional().default(false),
