@@ -14,6 +14,10 @@ const branch = require("../routes/branch");
 const booking = require("../routes/booking");
 const billHead = require("../routes/billHead");
 const dashboard = require("../routes/dashboard");
+const invoice = require("../routes/invoice");
+const containerType = require("../routes/containerType");
+const basisType = require("../routes/basisType");
+const currency = require("../routes/currency");
 
 const cors = require("cors");
 
@@ -45,6 +49,10 @@ module.exports = function (app) {
   app.use("/api/booking", booking);
   app.use("/api/billhead", billHead);
   app.use("/api/dashboard", dashboard);
+  app.use("/api/invoice", invoice);
+  app.use("/api/containertype", containerType);
+  app.use("/api/basistype", basisType);
+  app.use("/api/currency", currency);
 
   // app.use(error);
 };

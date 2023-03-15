@@ -1,6 +1,7 @@
 "use strict";
 const { number } = require("joi");
 const mongoose = require("mongoose");
+require("./billHead");
 
 const bookingSchema = new mongoose.Schema(
   {
@@ -15,7 +16,8 @@ const bookingSchema = new mongoose.Schema(
       ref: "profitcenter",
       required: true,
     },
-
+    ourRefNo: { type: String, required: true },
+    exrate: { type: String, required: true },
     freight: { type: String, required: true },
     operation: { type: String, required: true },
     shipmentType: { type: String, required: true },
@@ -49,8 +51,8 @@ const bookingSchema = new mongoose.Schema(
     remarks: { type: String, required: false },
     containers: [
       {
-        number: { type: String, required: false },
-        type: { type: String, required: false },
+        containerNo: { type: String, required: false },
+        containerType: { type: String, required: false },
         sealNo: { type: String, required: false },
         noOfPackages: { type: Number, required: false },
         grossWt: { type: Number, required: false, default: 0.0 },
@@ -77,7 +79,7 @@ const bookingSchema = new mongoose.Schema(
       {
         narration: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "billhead",
+          ref: "billheads",
           required: true,
         },
         description: { type: String, required: false },
@@ -100,7 +102,7 @@ const bookingSchema = new mongoose.Schema(
       {
         narration: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "billhead",
+          ref: "billheads",
           required: true,
         },
         description: { type: String, required: false },

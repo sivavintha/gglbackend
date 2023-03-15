@@ -5,6 +5,8 @@ const _ = require("lodash");
 const { CustomerVendor } = require("../models/customerVendor");
 const { Booking } = require("../models/booking");
 const { Commodity } = require("../models/commodity");
+const { Invoice } = require("../models/invoice");
+
 
 module.exports.getDashboard = async function () {
   try {
@@ -25,6 +27,9 @@ module.exports.getDashboard = async function () {
     const bookingsCount = await Booking.countDocuments({
       isDeleted: false,
     });
+    const invoiceCount = await Invoice.countDocuments({
+      isDeleted: false,
+    });
 
     return {
       status: true,
@@ -33,7 +38,7 @@ module.exports.getDashboard = async function () {
         vendorCount,
         commodityCount,
         bookingsCount,
-        invoiceCount: 0,
+        invoiceCount,
       },
       message: "data fetched successfully",
       errorCode: null,

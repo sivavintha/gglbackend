@@ -5,6 +5,7 @@ const { Booking } = require("../models/booking");
 const { ActivityLog } = require("../models/activityLog");
 const { validateCreateBooking } = require("../validations/booking");
 const { Counter } = require("../models/counter");
+require("../models/billHead");
 
 let activityLog = {};
 
@@ -100,7 +101,11 @@ module.exports.getBookingByID = async function (id) {
       .populate("CHA")
       .populate("commodity")
       .populate("pol")
-      .populate("pod");
+      .populate("pod")
+      .populate("sellRate.narration")
+      .populate("sellRate.billingTo")
+      .populate("buyRate.narration")
+      .populate("buyRate.billingTo");
     if (_.isEmpty(booking)) {
       winston.debug("Invalid Booking");
       return {
@@ -141,7 +146,11 @@ module.exports.getAllBooking = async function () {
       .populate("CHA")
       .populate("commodity")
       .populate("pol")
-      .populate("pod");
+      .populate("pod")
+      .populate("sellRate.narration")
+      .populate("sellRate.billingTo")
+      .populate("buyRate.narration")
+      .populate("buyRate.billingTo");
     if (_.isEmpty(booking)) {
       winston.debug();
       return {
@@ -205,7 +214,7 @@ module.exports.updateBookingGeneralDetails = async function (req) {
     booking.cbm = req.body.cbm;
     booking.description = req.body.description;
     booking.remarks = req.body.remarks;
-    booking.containers = req.body.containers;
+    // booking.containers = req.body.containers;
 
     booking.shipper = req.body.shipper;
     booking.consignee = req.body.consignee;
@@ -215,6 +224,9 @@ module.exports.updateBookingGeneralDetails = async function (req) {
     booking.deliveryAgent = req.body.deliveryAgent;
     booking.transporter = req.body.transporter;
     booking.CHA = req.body.CHA;
+
+    booking.ourRefNo = req.body.ourRefNo;
+    booking.exrate = req.body.exrate;
 
     booking.updatedBy = req.user._id;
     let updatedBooking = await new Booking(booking).save();
@@ -268,7 +280,7 @@ module.exports.updateBookingVesselSchedule = async function (req) {
     if (updatedBooking) {
       activityLog.collectionName = "booking";
       activityLog.type = "UPDATE";
-      activityLog.operation = "update_booking_containers";
+      activityLog.operation = "update_booking_schedule";
       activityLog.doc = updatedBooking;
 
       await new ActivityLog(activityLog).save();
@@ -307,9 +319,60 @@ module.exports.updateBookingRates = async function (req) {
         errorCode: 200,
       };
     }
+    if (req.body.sellRate) {
+      booking.sellRate = req.body.sellRate;
+    }
 
-    booking.sellRate = req.body.sellRate;
-    booking.buyRate = req.body.buyRate;
+    if (req.body.buyRate) {
+      booking.buyRate = req.body.buyRate;
+    }
+
+    booking.updatedBy = req.user._id;
+    let updatedBooking = await new Booking(booking).save();
+    if (updatedBooking) {
+      activityLog.collectionName = "booking";
+      activityLog.type = "UPDATE";
+      activityLog.operation = "update_booking_rates";
+      activityLog.doc = updatedBooking;
+
+      await new ActivityLog(activityLog).save();
+    }
+
+    return {
+      status: true,
+      data: updatedBooking,
+      message: "",
+      errorCode: null,
+    };
+  } catch (error) {
+    return { status: false, data: null, message: error, errorCode: 400 };
+  }
+};
+
+module.exports.updateBookingContainer = async function (req) {
+  try {
+    winston.info("Update Booking");
+
+    const booking = await Booking.findById(req.body._id);
+    if (_.isEmpty(booking)) {
+      return {
+        status: false,
+        data: null,
+        message: "No data found",
+        errorCode: 200,
+      };
+    }
+
+    if (booking.isDeleted) {
+      return {
+        status: false,
+        data: null,
+        message: "Booking Already removed!",
+        errorCode: 200,
+      };
+    }
+
+    booking.containers = req.body.containers;
 
     booking.updatedBy = req.user._id;
     let updatedBooking = await new Booking(booking).save();

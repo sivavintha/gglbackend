@@ -6,21 +6,22 @@ const winston = require("winston");
 const errMW = require("../middleware/middleware.error");
 
 const {
-  createBooking,
-  getAllBooking,
-  getBookingByID,
-  updateBookingGeneralDetails,
-  updateBookingRates,
-  updateBookingVesselSchedule,
-  deleteBooking,
-  updateBookingContainer,
-} = require("../controllers/booking");
+  createInvoice,
+  cancelInvoice,
+  getAllInvoice,
+  getInvoiceByID,
+  updateInvoice,
+  u,
+  updateInvoiceVesselSchedule,
+  deleteInvoice,
+  updateInvoiceContainer,
+} = require("../controllers/invoice");
 
-// CREATE Booking
+// CREATE Invoice
 router.post("/create", [auth], async (req, res) => {
   try {
-    winston.info(`Creating Booking : ${req.body.name}`);
-    const result = await createBooking(req);
+    winston.info(`Creating Invoice : ${req.body.name}`);
+    const result = await createInvoice(req);
     if (result.status) {
       return res.status(200).send({
         status: result.status,
@@ -43,11 +44,11 @@ router.post("/create", [auth], async (req, res) => {
   }
 });
 
-// UPDATE Booking general details
-router.put("/update/general", [auth], async (req, res) => {
+// UPDATE Invoice
+router.put("/update", [auth], async (req, res) => {
   try {
-    winston.info(`Update Booking : ${req.body.name}`);
-    const result = await updateBookingGeneralDetails(req);
+    winston.info(`Update Invoice : ${req.body.name}`);
+    const result = await updateInvoice(req);
     if (result.status) {
       return res.status(200).send({
         status: result.status,
@@ -70,11 +71,11 @@ router.put("/update/general", [auth], async (req, res) => {
   }
 });
 
-// UPDATE Booking general details
-router.put("/update/schedule", [auth], async (req, res) => {
+// Cancel Invoice
+router.put("/cancel", [auth], async (req, res) => {
   try {
-    winston.info(`Update Booking : ${req.body.name}`);
-    const result = await updateBookingVesselSchedule(req);
+    winston.info(`Update Invoice : ${req.body.name}`);
+    const result = await cancelInvoice(req);
     if (result.status) {
       return res.status(200).send({
         status: result.status,
@@ -97,64 +98,11 @@ router.put("/update/schedule", [auth], async (req, res) => {
   }
 });
 
-// UPDATE Booking rates
-router.put("/update/rates", [auth], async (req, res) => {
-  try {
-    winston.info(`Update Booking : ${req.body.name}`);
-    const result = await updateBookingRates(req);
-    if (result.status) {
-      return res.status(200).send({
-        status: result.status,
-        data: result.data,
-        message: result.message,
-      });
-    } else {
-      if (result.errorCode === 400) {
-        errMW(result.message, req, res);
-      } else {
-        return res.status(result.errorCode).send({
-          status: result.status,
-          data: result.data,
-          message: result.message,
-        });
-      }
-    }
-  } catch (error) {
-    errMW(error, req, res);
-  }
-});
-
-router.put("/update/container", [auth], async (req, res) => {
-  try {
-    winston.info(`Update Booking : ${req.body._id}`);
-    const result = await updateBookingContainer(req);
-    if (result.status) {
-      return res.status(200).send({
-        status: result.status,
-        data: result.data,
-        message: result.message,
-      });
-    } else {
-      if (result.errorCode === 400) {
-        errMW(result.message, req, res);
-      } else {
-        return res.status(result.errorCode).send({
-          status: result.status,
-          data: result.data,
-          message: result.message,
-        });
-      }
-    }
-  } catch (error) {
-    errMW(error, req, res);
-  }
-});
-
-//Getting All Booking
+//Getting All Invoice
 router.get("/all", [auth], async (req, res) => {
   try {
-    winston.info("Getting All Booking by query");
-    const result = await getAllBooking(req.body);
+    winston.info("Getting All Invoice by query");
+    const result = await getAllInvoice(req.body);
     if (result.status) {
       return res.status(200).send({
         status: result.status,
@@ -177,11 +125,11 @@ router.get("/all", [auth], async (req, res) => {
   }
 });
 
-//Getting Booking By ID
+//Getting Invoice By ID
 router.get("/:id", [auth], async (req, res) => {
   try {
-    winston.info("Getting Booking by ID");
-    const result = await getBookingByID(req.params.id);
+    winston.info("Getting Invoice by ID");
+    const result = await getInvoiceByID(req.params.id);
     if (result.status) {
       return res.status(200).send({
         status: result.status,
@@ -204,11 +152,11 @@ router.get("/:id", [auth], async (req, res) => {
   }
 });
 
-//delete Booking By ID
+//delete Invoice By ID
 router.delete("/:id", [auth], async (req, res) => {
   try {
-    winston.info("Deleting Booking by ID");
-    const result = await deleteBooking(req.params.id, req.user);
+    winston.info("Deleting Invoice by ID");
+    const result = await deleteInvoice(req.params.id, req.user);
     if (result.status) {
       return res.status(200).send({
         status: result.status,
