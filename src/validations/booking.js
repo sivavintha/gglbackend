@@ -10,8 +10,8 @@ function validateCreateBooking(booking) {
     fyear: Joi.string().required(),
     pc_code: Joi.string().required(),
 
-    ourRefNo: Joi.string().optional(),
-    exrate: Joi.string().optional(),
+    ourRefNo: Joi.string().optional().allow("").allow(null),
+    exrate: Joi.string().optional().allow("").allow(null),
     freight: Joi.string().required(),
     operation: Joi.string().required(),
     shipmentType: Joi.string().required(),
