@@ -18,6 +18,7 @@ function validateCreateInvoice(invoice) {
 
     invoiceDate: Joi.date().required(),
     isFinalled: Joi.boolean().required(),
+    isUSDInvoice: Joi.boolean().required(),
     finalledAt: Joi.date().required().allow(null).allow(""),
    
     cancelledBy: joiObjectId().allow(null).allow(""),

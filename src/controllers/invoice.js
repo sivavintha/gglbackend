@@ -67,7 +67,7 @@ module.exports.createInvoice = async function (req) {
 
     if (invoice) {
       await Counter.findOneAndUpdate(
-        { type: "COUNTER" },
+        { type: "INVOICE" },
         { $inc: { sequenceNumber: 1 } },
         { new: true }
       );
@@ -235,6 +235,7 @@ module.exports.updateInvoice = async function (req) {
       invoice.billingTo = invoice.billingTo;
       invoice.bookingNo = invoice.bookingNo;
       invoice.invoiceDate = invoice.invoiceDate;
+      invoice.isUSDInvoice = invoice.isUSDInvoice;
     }
 
     invoice.updatedBy = req.user._id;

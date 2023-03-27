@@ -32,6 +32,7 @@ const invoiceSchema = new mongoose.Schema(
 
     invoiceDate: { type: Date, required: true },
     isFinalled: { type: Boolean, required: true },
+    isUSDInvoice: { type: Boolean, required: true },
     finalledAt: { type: Boolean, required: false, default: false },
 
     cancelledBy: {
