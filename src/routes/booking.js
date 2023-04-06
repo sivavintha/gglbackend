@@ -14,6 +14,7 @@ const {
   updateBookingVesselSchedule,
   deleteBooking,
   updateBookingContainer,
+  updateBookingEvents,
 } = require("../controllers/booking");
 
 // CREATE Booking
@@ -124,10 +125,38 @@ router.put("/update/rates", [auth], async (req, res) => {
   }
 });
 
+//update containers
 router.put("/update/container", [auth], async (req, res) => {
   try {
     winston.info(`Update Booking : ${req.body._id}`);
     const result = await updateBookingContainer(req);
+    if (result.status) {
+      return res.status(200).send({
+        status: result.status,
+        data: result.data,
+        message: result.message,
+      });
+    } else {
+      if (result.errorCode === 400) {
+        errMW(result.message, req, res);
+      } else {
+        return res.status(result.errorCode).send({
+          status: result.status,
+          data: result.data,
+          message: result.message,
+        });
+      }
+    }
+  } catch (error) {
+    errMW(error, req, res);
+  }
+});
+
+//update events
+router.put("/update/events", [auth], async (req, res) => {
+  try {
+    winston.info(`Update Events : ${req.body._id}`);
+    const result = await updateBookingEvents(req);
     if (result.status) {
       return res.status(200).send({
         status: result.status,

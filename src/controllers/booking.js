@@ -396,6 +396,53 @@ module.exports.updateBookingContainer = async function (req) {
   }
 };
 
+module.exports.updateBookingEvents = async function (req) {
+  try {
+    winston.info("Update Booking");
+
+    const booking = await Booking.findById(req.body._id);
+    if (_.isEmpty(booking)) {
+      return {
+        status: false,
+        data: null,
+        message: "No data found",
+        errorCode: 200,
+      };
+    }
+
+    if (booking.isDeleted) {
+      return {
+        status: false,
+        data: null,
+        message: "Booking Already removed!",
+        errorCode: 200,
+      };
+    }
+
+    booking.events = req.body.events;
+
+    booking.updatedBy = req.user._id;
+    let updatedBooking = await new Booking(booking).save();
+    if (updatedBooking) {
+      activityLog.collectionName = "booking";
+      activityLog.type = "UPDATE";
+      activityLog.operation = "update_booking_events";
+      activityLog.doc = updatedBooking;
+
+      await new ActivityLog(activityLog).save();
+    }
+
+    return {
+      status: true,
+      data: updatedBooking,
+      message: "",
+      errorCode: null,
+    };
+  } catch (error) {
+    return { status: false, data: null, message: error, errorCode: 400 };
+  }
+};
+
 module.exports.deleteBooking = async function (id, user) {
   try {
     winston.info("Update Booking");

@@ -6,6 +6,6 @@ const basisTypeSchema = new mongoose.Schema({
   abbr: { type: String, required: true },
 });
 
-const BasisType = mongoose.model("basistype", basisTypeSchema, "basisType");
+const BasisType = mongoose.model("basistype", basisTypeSchema, "basistype");
 
 module.exports.BasisType = BasisType;
